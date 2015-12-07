@@ -88,34 +88,3 @@ object VRepAPI {
   }
 
 }
-
-/*
-Remote API helper functions
-
-simxStart
-simxFinish
-simxGetConnectionId
-simxPauseCommunication
-simxCreateBuffer
-simxReleaseBuffer
-simxSynchronous
-simxSynchronousTrigger
-simxGetPingTime
-
-General object handle retrieval
-
-simxGetObjectHandle
-simxGetObjectGroupData
-simxGetObjects
-simxGetObjectChild
-simxGetObjectParent
-simxGetUIHandle
-simxGetCollisionHandle
-simxGetDistanceHandle
-
-Collision detection functionality
-
-simxGetCollisionHandle
-simxGetObjectGroupData
-simxReadCollision
- */
