@@ -3,11 +3,12 @@ Simple Scala binding for
 [Coppelia Robotics V-REP simulator](http://www.coppeliarobotics.com/) ([remote API](http://www.coppeliarobotics.com/helpFiles/en/remoteApiOverview.htm))
 
 ## Getting started
-1. Add the library to the project one of several ways:
-    1. Assembly jar by `sbt assembly`
-    (jar is located in `vrepapi/target/scala-2.11/vrepapiscala-assembly-x.x.jar`)
-    2. Download pre-compiled jar
-    3. Add src files in your project
+1. Add the library in your sbt project by simply adding the following dependency to your build file:
+```scala
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+
+libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.1-SNAPSHOT"
+```
 2. Copy platform-specific native library from
     `V-REP/programming/remoteApiBindings/lib/lib/`
     into the root folder of your project (or configure `java.library.path`)
