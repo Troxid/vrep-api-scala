@@ -10,7 +10,7 @@ resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repos
 libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.1-SNAPSHOT"
 ```
 2. Copy platform-specific native library from
-    `V-REP/programming/remoteApiBindings/lib/lib/`
+    `V-REP/programming/remoteApiBindings/java/lib/`
     into the root folder of your project (or configure `java.library.path`)
 3. Find the socket port number in `V-REP/remoteApiConnections.txt` and use
     it to connect to the server simulator
