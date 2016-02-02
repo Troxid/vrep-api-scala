@@ -1,6 +1,6 @@
 // This file is part of the REMOTE API
 // 
-// Copyright 2006-2014 Coppelia Robotics GmbH. All rights reserved. 
+// Copyright 2006-2015 Coppelia Robotics GmbH. All rights reserved. 
 // marc@coppeliarobotics.com
 // www.coppeliarobotics.com
 // 
@@ -24,7 +24,7 @@
 // along with the REMOTE API.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.2.0 on Feb. 3rd 2015
+// This file was automatically created for V-REP release V3.2.3 rev4 on December 21st 2015
 
 package coppelia;
 
@@ -48,7 +48,7 @@ public class remoteApi
 	public native int simxSetSphericalJointMatrix(int clientID,int jointHandle,FloatWA matrix,int operationMode);
 	public native int simxSetJointTargetVelocity(int clientID,int jointHandle,float targetVelocity,int operationMode);
 	public native int simxSetJointTargetPosition(int clientID,int jointHandle,float targetPosition,int operationMode);
-	@Deprecated public native int simxJointGetForce(int clientID,int jointHandle,FloatW force,int operationMode);
+	public native int simxJointGetForce(int clientID,int jointHandle,FloatW force,int operationMode);
 	public native int simxGetJointForce(int clientID,int jointHandle,FloatW force,int operationMode);
 	public native int simxSetJointForce(int clientID,int jointHandle,float force,int operationMode);
 	public native int simxReadForceSensor(int clientID,int forceSensorHandle, IntW state,FloatWA forceVector,FloatWA torqueVector,int operationMode);
@@ -105,6 +105,7 @@ public class remoteApi
 	public native int simxGetStringParameter(int clientID,int paramIdentifier,StringW paramValue,int operationMode);
 	public native int simxGetCollisionHandle(int clientID,final String collisionObjectName,IntW handle,int operationMode);
 	public native int simxGetDistanceHandle(int clientID,final String distanceObjectName,IntW handle,int operationMode);
+	public native int simxGetCollectionHandle(int clientID,final String collectionName,IntW handle,int operationMode);
 	public native int simxReadCollision(int clientID,int collisionObjectHandle,BoolW collisionState,int operationMode);
 	public native int simxGetObjects(int clientID,int objectType,IntWA objectHandles,int operationMode);
 	public native int simxDisplayDialog(int clientID,final String titleText,final String mainText,int dialogType,final String initialText,FloatWA titleColors,FloatWA dialogColors,IntW dialogHandle,IntW uiHandle,int operationMode);
@@ -586,7 +587,24 @@ public class remoteApi
 	public static final int	sim_boolparam_aux_clip_planes_enabled = 23;
 	public static final int	sim_boolparam_full_model_copy_from_api = 24;
 	public static final int	sim_boolparam_realtime_simulation = 25;
+	public static final int	sim_boolparam_force_show_wireless_emission = 27;
+	public static final int	sim_boolparam_force_show_wireless_reception = 28;
 	public static final int	sim_boolparam_video_recording_triggered = 29;
+	
+	public static final int	sim_boolparam_threaded_rendering_enabled = 32;
+	public static final int	sim_boolparam_fullscreen = 33;
+	public static final int	sim_boolparam_headless = 34;
+	public static final int	sim_boolparam_hierarchy_toolbarbutton_enabled = 35;
+	public static final int	sim_boolparam_browser_toolbarbutton_enabled = 36;
+	public static final int	sim_boolparam_objectshift_toolbarbutton_enabled = 37;
+	public static final int	sim_boolparam_objectrotate_toolbarbutton_enabled = 38;
+	public static final int	sim_boolparam_force_calcstruct_all_visible = 39;
+	public static final int	sim_boolparam_force_calcstruct_all = 40;
+	public static final int	sim_boolparam_exit_request = 41;
+	public static final int	sim_boolparam_play_toolbarbutton_enabled = 42;
+	public static final int	sim_boolparam_pause_toolbarbutton_enabled = 43;
+	public static final int	sim_boolparam_stop_toolbarbutton_enabled = 44;
+	public static final int	sim_boolparam_waiting_for_trigger = 45;
 
 
 	/* Integer parameters: */
@@ -625,16 +643,27 @@ public class remoteApi
 	public static final int	sim_intparam_dynamic_warning_disabled_mask = 32;
 	public static final int	sim_intparam_simulation_warning_disabled_mask = 33;
 	public static final int	sim_intparam_scene_index = 34;
-	
-	
+	public static final int	sim_intparam_motionplanning_seed = 35;
+	public static final int	sim_intparam_speedmodifier = 36;
 
 	/* Float parameters: */
 	public static final int sim_floatparam_rand = 0; /* random value (0.0-1.0) */
 	public static final int sim_floatparam_simulation_time_step = 1; 
+	public static final int coppelia_remoteApi_sim_floatparam_stereo_distance = 2; 
 		
 	/* String parameters: */
 	public static final int	sim_stringparam_application_path = 0; /* path of V-REP's executable */
 	public static final int	sim_stringparam_video_filename = 1;
+	public static final int	sim_stringparam_app_arg1 = 2;
+	public static final int	sim_stringparam_app_arg2 = 3;
+	public static final int	sim_stringparam_app_arg3 = 4;
+	public static final int	sim_stringparam_app_arg4 = 5;
+	public static final int	sim_stringparam_app_arg5 = 6;
+	public static final int	sim_stringparam_app_arg6 = 7;
+	public static final int	sim_stringparam_app_arg7 = 8;
+	public static final int	sim_stringparam_app_arg8 = 9;
+	public static final int	sim_stringparam_app_arg9 = 10;
+	public static final int	sim_stringparam_scene_path_and_name = 13;
 		
 	/* Array parameters: */
 	public static final int sim_arrayparam_gravity = 0;
@@ -643,6 +672,7 @@ public class remoteApi
 	public static final int sim_arrayparam_background_color1 = 3;
 	public static final int sim_arrayparam_background_color2 = 4;
 	public static final int sim_arrayparam_ambient_light = 5; 
+	public static final int sim_arrayparam_random_euler = 6; 
 
 	/* User interface elements: */
 	public static final int sim_gui_menubar = 1;

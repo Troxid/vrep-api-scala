@@ -1,6 +1,7 @@
-package vrepapiscala
+package vrepapiscala.sensors
 
-import coppelia.{IntW, FloatWA, BoolW, remoteApi}
+import coppelia.{BoolW, FloatWA, IntW, remoteApi}
+import vrepapiscala.OpMode
 import vrepapiscala.common.Vec3
 
 /**
@@ -10,27 +11,32 @@ class ProximitySensor private[vrepapiscala](remote: remoteApi, id: Int, handle: 
 
   /** Reads the state of a proximity sensor. */
   def read: ProximitySensor#Values = {
-    val ds   = new BoolW(false)
+    val ds   = new BoolW(false) // detection state
     //TODO: size of arr as function param
-    val dp   = new FloatWA(20)
-    val doh  = new IntW(-1)
-    val dsnv = new FloatWA(3)
+    val dp   = new FloatWA(20) // detected point
+    val doi  = new IntW(-1) // detected object (information)
+    val dsnv = new FloatWA(3) // detected surface normal vector
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxReadProximitySensor(id, handle, ds, dp, doh, dsnv, OpMode.OneShot.rawCode)
+    remote.simxReadProximitySensor(id, handle, ds, dp, doi, dsnv, OpMode.OneShotWait.rawCode)
     val dsna = dsnv.getArray
-    Values(ds.getValue, dp.getArray, doh.getValue, Vec3(dsna(0), dsna(1), dsna(2)))
+    val dpa = dp.getArray
+    Values(ds.getValue,
+      Vec3(dpa(0), dpa(1), dpa(2)),
+      new NavigationSensor(remote, id, doi.getValue),
+      Vec3(dsna(0), dsna(1), dsna(2)))
   }
 
   /** Contains detected values of sensor
+ *
     * @param detectionState the detection state.
     * @param detectedPoint the detected point coordinates (relative to the sensor reference frame).
-    * @param detectedObjectHandle the handle of the detected object.
+    * @param detectedObject the geolocation information of the detected object.
     * @param detectedSurfaceNormalVector the normal vector (normalized) of the detected surface.
     *                                    Relative to the sensor reference frame.
     */
   case class Values(detectionState: Boolean,
-                    detectedPoint: Array[Float],
-                    detectedObjectHandle: Int,
+                    detectedPoint: Vec3,
+                    detectedObject: NavigationSensor,
                     detectedSurfaceNormalVector: Vec3)
 
 }

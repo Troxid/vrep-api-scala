@@ -1,6 +1,7 @@
-package vrepapiscala
+package vrepapiscala.sensors
 
 import coppelia.{FloatWA, remoteApi}
+import vrepapiscala.OpMode
 import vrepapiscala.common.{EulerAngles, Vec3}
 
 /**
@@ -10,6 +11,7 @@ class NavigationSensor private[vrepapiscala](remote: remoteApi, id: Int, handle:
 
   /**
     * Retrieves the position.
+ *
     * @return 3D vector
     */
   def position: Vec3 ={
@@ -24,6 +26,7 @@ class NavigationSensor private[vrepapiscala](remote: remoteApi, id: Int, handle:
 
   /**
     * Retrieves the orientation.
+ *
     * @return Euler angles
     */
   def orientation: EulerAngles = {
@@ -38,6 +41,7 @@ class NavigationSensor private[vrepapiscala](remote: remoteApi, id: Int, handle:
 
   /**
     * Retrieves the linear and angular velocity.
+ *
     * @return the linear velocity (vx, vy, vz),
     *         the angular velocity (dAlpha, dBeta, dGamma)
     */

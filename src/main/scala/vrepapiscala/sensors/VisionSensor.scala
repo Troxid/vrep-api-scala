@@ -1,6 +1,7 @@
-package vrepapiscala
+package vrepapiscala.sensors
 
 import coppelia._
+import vrepapiscala.OpMode
 
 /**
   * Created by troxid on 22.11.15.
@@ -27,6 +28,7 @@ class VisionSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int
 
   /**
     *  Retrieves the image of a vision sensor.
+ *
     * @param greyScale true: each image pixel is a byte (greyscale image), otherwise each image pixel is a rgb
     * @return the image data
     */
@@ -50,6 +52,7 @@ class VisionSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int
 
   /**
     * Retrieves the depth buffer of a vision sensor.
+ *
     * @return the depth buffer data.
     *         Values are in the range of 0-1 (0=closest to sensor, 1=farthest from sensor).
     */
