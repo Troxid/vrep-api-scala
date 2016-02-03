@@ -28,54 +28,55 @@ Basically implemented those components that are required to control the robot:
 ## Example
 ```scala
 import vrepapiscala._
+import vrepapiscala.sensors.ProximitySensor
 
-object Main extends App {
+object PioneerRemoteControlExample extends App {
   val api = VRepAPI.connect("127.0.0.1", 19997).get
-  val robot = new Robot(api)
+  val robot = new PioneerP3dx(api)
 
-  api.startSimulation()
+  api.simulation.start()
 
   for(_ <- 0 to 500){
     Thread.sleep(10)
-    println(robot.gps.position)
-    if (robot.sensors._1) {
-      robot.rotateRight()
-    } else if (robot.sensors._2) {
-      robot.rotateLeft()
-    } else {
-      robot.moveForward()
+    robot.leftAndRightSensor match {
+      case (ProximitySensor.Values(true, dp, _, _), _) if dp.length < 0.5=>
+        robot.rotateRight()
+      case (_, ProximitySensor.Values(true, dp, _, _)) if dp.length < 0.5=>
+        robot.rotateLeft()
+      case _ =>
+        robot.moveForward()
     }
   }
 
-  api.stopSimulation()
+  api.simulation.stop()
 }
 
-class Robot(api: VRepAPI) {
+class PioneerP3dx(api: VRepAPI) {
   private val speed = 2f
-  private val leftMotor = api.getJoint("left_motor").get
-  private val rightMotor = api.getJoint("right_motor").get
-  private val leftSensor = api.getProximitySensor("left_sonar").get
-  private val rightSensor = api.getProximitySensor("right_sonar").get
-  val gps = api.getNavigationSensor("gps").get
+  private val leftMotor = api.joint.withVelocityControl("Pioneer_p3dx_leftMotor")
+  private val rightMotor = api.joint.withVelocityControl("Pioneer_p3dx_rightMotor")
+  private val frontSensors =
+    for(i <- 1 to 8)
+      yield api.sensor.proximitySensor("Pioneer_p3dx_ultrasonicSensor" + i)
 
   def moveForward(): Unit = {
     leftMotor.setTargetVelocity(speed)
-    rightMotor.setTargetVelocity(-speed)
+    rightMotor.setTargetVelocity(speed)
   }
 
   def moveBackward(): Unit = {
     leftMotor.setTargetVelocity(-speed)
-    rightMotor.setTargetVelocity(speed)
+    rightMotor.setTargetVelocity(-speed)
   }
 
   def rotateLeft(): Unit = {
     leftMotor.setTargetVelocity(-speed)
-    rightMotor.setTargetVelocity(-speed)
+    rightMotor.setTargetVelocity(speed)
   }
 
   def rotateRight(): Unit = {
     leftMotor.setTargetVelocity(speed)
-    rightMotor.setTargetVelocity(speed)
+    rightMotor.setTargetVelocity(-speed)
   }
 
   def stop(): Unit = {
@@ -83,8 +84,7 @@ class Robot(api: VRepAPI) {
     rightMotor.setTargetVelocity(0)
   }
 
-  def sensors: (Boolean, Boolean) =
-    (leftSensor.read.detectionState, rightSensor.read.detectionState)
+  def leftAndRightSensor = (frontSensors(1).read, frontSensors(6).read)
 }
 ```
 
