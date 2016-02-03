@@ -8,12 +8,13 @@ import vrepapiscala.common.Vec3
   * Created by troxid on 23.11.15.
   */
 class ForceSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int) {
+  import ForceSensor._
 
   /**
     * Reads the force and torque applied to a force sensor (filtered values are read),
     * and its current state ('unbroken' or 'broken').
     */
-  def read: ForceSensor#Values = {
+  def read: ForceSensor.Values = {
     val state = new IntW(-1)
     val forceVec = new FloatWA(3)
     val torqueVec = new FloatWA(3)
@@ -32,8 +33,11 @@ class ForceSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int)
     remote.simxBreakForceSensor(id, handle, OpMode.OneShotWait.rawCode)
   }
 
+
+}
+
+object ForceSensor {
   /** Contains detected values of sensor
- *
     * @param state: the state of the force sensor .
     *             false : force and torque data is available, otherwise it is not (yet) available
     *             (e.g. when not enough values are present for the filter) true: force sensor is broken,

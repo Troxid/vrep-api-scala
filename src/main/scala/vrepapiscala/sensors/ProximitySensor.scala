@@ -8,9 +8,9 @@ import vrepapiscala.common.Vec3
   * Created by troxid on 22.11.15.
   */
 class ProximitySensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int) {
-
+  import ProximitySensor._
   /** Reads the state of a proximity sensor. */
-  def read: ProximitySensor#Values = {
+  def read: ProximitySensor.Values = {
     val ds   = new BoolW(false) // detection state
     //TODO: size of arr as function param
     val dp   = new FloatWA(20) // detected point
@@ -25,9 +25,10 @@ class ProximitySensor private[vrepapiscala](remote: remoteApi, id: Int, handle: 
       new NavigationSensor(remote, id, doi.getValue),
       Vec3(dsna(0), dsna(1), dsna(2)))
   }
+}
 
+object ProximitySensor {
   /** Contains detected values of sensor
- *
     * @param detectionState the detection state.
     * @param detectedPoint the detected point coordinates (relative to the sensor reference frame).
     * @param detectedObject the geolocation information of the detected object.
@@ -38,6 +39,5 @@ class ProximitySensor private[vrepapiscala](remote: remoteApi, id: Int, handle: 
                     detectedPoint: Vec3,
                     detectedObject: NavigationSensor,
                     detectedSurfaceNormalVector: Vec3)
-
 }
 
