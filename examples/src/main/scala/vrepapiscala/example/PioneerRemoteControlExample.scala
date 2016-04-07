@@ -1,9 +1,9 @@
 /**
   * Created by troxid on 09.06.2015.
   */
+package vrepapiscala.example
 
-import vrepapiscala._
-import vrepapiscala.sensors.ProximitySensor
+import vrepapiscala.VRepAPI
 
 object PioneerRemoteControlExample extends App {
   val api = VRepAPI.connect("127.0.0.1", 19997).get
@@ -12,15 +12,16 @@ object PioneerRemoteControlExample extends App {
   api.simulation.start()
 
   for(_ <- 0 to 500){
-    Thread.sleep(10)
-    robot.leftAndRightSensor match {
-      case (ProximitySensor.Values(true, dp, _, _), _) if dp.length < 0.5=>
-        robot.rotateRight()
-      case (_, ProximitySensor.Values(true, dp, _, _)) if dp.length < 0.5=>
-        robot.rotateLeft()
-      case _ =>
-        robot.moveForward()
+    val resLS = robot.leftSensor.read
+    val resRS = robot.rightSensor.read
+    if(resLS.detectionState && resLS.detectedPoint.length < 0.5){
+      robot.rotateRight()
+    }else if(resRS.detectionState && resRS.detectedPoint.length < 0.5){
+      robot.rotateLeft()
+    } else {
+      robot.moveForward()
     }
+    Thread.sleep(10)
   }
 
   api.simulation.stop()
@@ -28,11 +29,11 @@ object PioneerRemoteControlExample extends App {
 
 class PioneerP3dx(api: VRepAPI) {
   private val speed = 2f
-  private val leftMotor = api.joint.withVelocityControl("Pioneer_p3dx_leftMotor")
-  private val rightMotor = api.joint.withVelocityControl("Pioneer_p3dx_rightMotor")
+  private val leftMotor = api.joint.withVelocityControl("Pioneer_p3dx_leftMotor").get
+  private val rightMotor = api.joint.withVelocityControl("Pioneer_p3dx_rightMotor").get
   private val frontSensors =
     for(i <- 1 to 8)
-      yield api.sensor.proximitySensor("Pioneer_p3dx_ultrasonicSensor" + i)
+      yield api.sensor.proximity("Pioneer_p3dx_ultrasonicSensor" + i).get
 
   def moveForward(): Unit = {
     leftMotor.setTargetVelocity(speed)
@@ -59,7 +60,8 @@ class PioneerP3dx(api: VRepAPI) {
     rightMotor.setTargetVelocity(0)
   }
 
-  def leftAndRightSensor = (frontSensors(1).read, frontSensors(6).read)
+  def leftSensor = frontSensors(1)
 
+  def rightSensor = frontSensors(6)
 }
 

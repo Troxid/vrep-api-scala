@@ -2,12 +2,13 @@ package vrepapiscala.sensors
 
 import coppelia.{FloatWA, remoteApi}
 import vrepapiscala.OpMode
+import vrepapiscala.VRepAPI._
 import vrepapiscala.common.{EulerAngles, Vec3}
 
 /**
   * Created by troxid on 24.11.15.
   */
-class NavigationSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int) {
+class PositionSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int, opMode: OpMode) {
 
   /**
     * Retrieves the position.
@@ -17,9 +18,9 @@ class NavigationSensor private[vrepapiscala](remote: remoteApi, id: Int, handle:
   def position: Vec3 ={
     val pos = new FloatWA(3)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetObjectPosition(
+    checkReturnCode(remote.simxGetObjectPosition(
       id, handle, -1, pos,
-      OpMode.OneShotWait.rawCode)
+      opMode.rawCode))
     val ps = pos.getArray
     Vec3(ps(0), ps(1), ps(2))
   }
@@ -32,9 +33,9 @@ class NavigationSensor private[vrepapiscala](remote: remoteApi, id: Int, handle:
   def orientation: EulerAngles = {
     val angles = new FloatWA(3)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetObjectOrientation(
+    checkReturnCode(remote.simxGetObjectOrientation(
       id, handle, -1, angles,
-      OpMode.OneShotWait.rawCode)
+      opMode.rawCode))
     val an = angles.getArray
     EulerAngles(an(0), an(1), an(2))
   }
@@ -49,9 +50,9 @@ class NavigationSensor private[vrepapiscala](remote: remoteApi, id: Int, handle:
     val lin = new FloatWA(3)
     val ang = new FloatWA(3)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetObjectVelocity(
+    checkReturnCode(remote.simxGetObjectVelocity(
       id, handle, lin, ang,
-      OpMode.OneShotWait.rawCode)
+      opMode.rawCode))
     val l = lin.getArray
     val a = lin.getArray
     (Vec3(l(0), l(1), l(2)), EulerAngles(a(0), a(1), a(2)))

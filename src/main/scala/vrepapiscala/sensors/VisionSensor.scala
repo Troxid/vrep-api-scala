@@ -2,12 +2,17 @@ package vrepapiscala.sensors
 
 import coppelia._
 import vrepapiscala.OpMode
+import vrepapiscala.VRepAPI._
 
 /**
   * Created by troxid on 22.11.15.
   */
 
-class VisionSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int, resolution: (Int, Int)) {
+class VisionSensor private[vrepapiscala](
+  remote: remoteApi,
+  id: Int,
+  handle: Int, resolution: (Int, Int),
+  opMode: OpMode) {
 
   val (resolutionX, resolutionY) = resolution
   private var fstCall = true
@@ -16,9 +21,9 @@ class VisionSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int
     val ds = new BoolW(false)
     val av = new FloatWAA(bufferSize)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxReadVisionSensor(
+    checkReturnCode(remote.simxReadVisionSensor(
       id, handle, ds, av,
-      OpMode.OneShotWait.rawCode)
+      OpMode.OneShotWait.rawCode))
     val resArr = new Array[Array[Float]](bufferSize)
     for(i <- resArr.indices){
       resArr(i) = av.getArray()(i).getArray
@@ -37,10 +42,10 @@ class VisionSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int
     val res = new IntWA(2)
     val img = new CharWA(resolutionX * resolutionY * numOfClr)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetVisionSensorImage(
+    checkReturnCode(remote.simxGetVisionSensorImage(
       id, handle, res, img,
       if (greyScale) 1 else 0,
-      OpMode.OneShotWait.rawCode)
+      OpMode.OneShotWait.rawCode))
     val ra = res.getArray
     val imgArr = img.getArray.map(ch => ch.toInt)
     if(fstCall){
@@ -60,9 +65,9 @@ class VisionSensor private[vrepapiscala](remote: remoteApi, id: Int, handle: Int
     val res = new IntWA(2)
     val buf = new FloatWA(resolutionX * resolutionY)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetVisionSensorDepthBuffer(
+    checkReturnCode(remote.simxGetVisionSensorDepthBuffer(
       id, handle, res, buf,
-      OpMode.OneShotWait.rawCode)
+      OpMode.OneShotWait.rawCode))
     val ra = res.getArray
     if(fstCall){
       fstCall = false

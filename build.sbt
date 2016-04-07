@@ -1,8 +1,9 @@
+
 name := "vrepapiscala"
 
-version := "0.1-SNAPSHOT"
+version := "0.2.1"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 organization := "com.github.troxid"
 

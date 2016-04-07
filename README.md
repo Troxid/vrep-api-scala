@@ -5,9 +5,7 @@ Simple Scala binding for
 ## Getting started
 1. Add the library in your sbt project by simply adding the following dependency to your build file:
 ```scala
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-
-libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.1-SNAPSHOT"
+libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.2.1"
 ```
 2. Copy platform-specific native library from
     `V-REP/programming/remoteApiBindings/java/lib/`
@@ -23,12 +21,12 @@ Basically implemented those components that are required to control the robot:
 * Proximity sensor
 * Vision sensor
 * Force sensor
-* Navigation sensor (used for that dummy object)
+* Position sensor (used for that dummy or shape object)
+* Remote function calls
 
 ## Example
 ```scala
 import vrepapiscala._
-import vrepapiscala.sensors.ProximitySensor
 
 object PioneerRemoteControlExample extends App {
   val api = VRepAPI.connect("127.0.0.1", 19997).get
@@ -37,15 +35,16 @@ object PioneerRemoteControlExample extends App {
   api.simulation.start()
 
   for(_ <- 0 to 500){
-    Thread.sleep(10)
-    robot.leftAndRightSensor match {
-      case (ProximitySensor.Values(true, dp, _, _), _) if dp.length < 0.5=>
-        robot.rotateRight()
-      case (_, ProximitySensor.Values(true, dp, _, _)) if dp.length < 0.5=>
-        robot.rotateLeft()
-      case _ =>
-        robot.moveForward()
+    val resLS = robot.leftSensor.read
+    val resRS = robot.rightSensor.read
+    if(resLS.detectionState && resLS.detectedPoint.length < 0.5){
+      robot.rotateRight()
+    }else if(resRS.detectionState && resRS.detectedPoint.length < 0.5){
+      robot.rotateLeft()
+    } else {
+      robot.moveForward()
     }
+    Thread.sleep(10)
   }
 
   api.simulation.stop()
@@ -53,11 +52,11 @@ object PioneerRemoteControlExample extends App {
 
 class PioneerP3dx(api: VRepAPI) {
   private val speed = 2f
-  private val leftMotor = api.joint.withVelocityControl("Pioneer_p3dx_leftMotor")
-  private val rightMotor = api.joint.withVelocityControl("Pioneer_p3dx_rightMotor")
+  private val leftMotor = api.joint.withVelocityControl("Pioneer_p3dx_leftMotor").get
+  private val rightMotor = api.joint.withVelocityControl("Pioneer_p3dx_rightMotor").get
   private val frontSensors =
     for(i <- 1 to 8)
-      yield api.sensor.proximitySensor("Pioneer_p3dx_ultrasonicSensor" + i)
+      yield api.sensor.proximity("Pioneer_p3dx_ultrasonicSensor" + i).get
 
   def moveForward(): Unit = {
     leftMotor.setTargetVelocity(speed)
@@ -84,7 +83,9 @@ class PioneerP3dx(api: VRepAPI) {
     rightMotor.setTargetVelocity(0)
   }
 
-  def leftAndRightSensor = (frontSensors(1).read, frontSensors(6).read)
+  def leftSensor = frontSensors(1)
+
+  def rightSensor = frontSensors(6)
 }
 ```
 

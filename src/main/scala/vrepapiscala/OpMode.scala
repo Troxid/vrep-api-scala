@@ -1,7 +1,6 @@
 package vrepapiscala
 
 import coppelia.remoteApi
-import coppelia.remoteApi._
 
 /**
   * Created by troxid on 22.11.15.
@@ -16,7 +15,7 @@ object OpMode {
     * @note Non-blocking mode.
     * @note Regular operation modes.
     */
-  case object OneShot     extends OpMode(simx_opmode_oneshot)
+  case object OneShot extends OpMode(simx_opmode_oneshot)
 
   /** The command is sent, and the function will wait for the actual reply
     * and return it (if the function doesn't time out). The received command reply will be removed
@@ -33,7 +32,7 @@ object OpMode {
     * @note Non-blocking mode.
     * @note Regular operation modes.
     */
-  case class Streaming(msDelay: Int = 0)   extends OpMode(simx_opmode_streaming + msDelay){
+  case class Streaming(msDelay: Int = 0) extends OpMode(simx_opmode_streaming + msDelay){
     require(msDelay >= 0 && msDelay <= 65535, "Alpha must be between 0-65535")
   }
 
@@ -50,7 +49,7 @@ object OpMode {
     * @note Operation modes for heavy data.
     * @note Not recommended
     */
-  case class OneShotSplit(chunkSize: Int = 100)    extends OpMode(simx_opmode_oneshot_split + chunkSize){
+  case class OneShotSplit(chunkSize: Int = 100) extends OpMode(simx_opmode_oneshot_split + chunkSize){
     require(chunkSize >= 100 && chunkSize <= 65535, "Beta must be between 100-65535")
   }
 
@@ -65,7 +64,7 @@ object OpMode {
     * @note Operation modes for heavy data.
     * @note Not recommended
     */
-  case class StreamingSplit(chunkSize: Int = 100)  extends OpMode(simx_opmode_streaming_split + chunkSize){
+  case class StreamingSplit(chunkSize: Int = 100) extends OpMode(simx_opmode_streaming_split + chunkSize){
     require(chunkSize >= 100 && chunkSize <= 65535, "Beta must be between 100-65535")
   }
 
@@ -86,7 +85,7 @@ object OpMode {
     * @note Non-blocking mode.
     * @note Special operation modes
     */
-  case object Buffer      extends OpMode(simx_opmode_buffer)
+  case object Buffer extends OpMode(simx_opmode_buffer)
 
   /**
     * A previous reply to the same command is cleared from the input buffer (if available).
@@ -95,5 +94,5 @@ object OpMode {
     * @note Non-blocking mode.
     * @note Special operation modes
     */
-  case object Remove     extends OpMode(simx_opmode_remove)
+  case object Remove extends OpMode(simx_opmode_remove)
 }

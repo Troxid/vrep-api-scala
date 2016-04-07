@@ -1,26 +1,24 @@
 package vrepapiscala
 
 import coppelia.remoteApi
+import VRepAPI._
 
 /**
   * Created by trox on 02.02.16.
   */
 class SimulationState private[vrepapiscala](remote: remoteApi, id: Int){
   /** Requests a start of a simulation (or a resume of a paused simulation). */
-  def start(): CommandReturnCode ={
-    val res = remote.simxStartSimulation(id, OpMode.OneShotWait.rawCode)
-    CommandReturnCode.fromRaw(res)
+  def start(): Unit ={
+    checkReturnCode(remote.simxStartSimulation(id, OpMode.OneShotWait.rawCode))
   }
 
   /** Requests a pause of a simulation. */
-  def pause(): CommandReturnCode ={
-    val res = remote.simxPauseSimulation(id, OpMode.OneShotWait.rawCode)
-    CommandReturnCode.fromRaw(res)
+  def pause(): Unit ={
+    checkReturnCode(remote.simxPauseSimulation(id, OpMode.OneShotWait.rawCode))
   }
 
   /** Requests a stop of the running simulation. */
-  def stop(): CommandReturnCode ={
-    val res = remote.simxStopSimulation(id, OpMode.OneShotWait.rawCode)
-    CommandReturnCode.fromRaw(res)
+  def stop(): Unit ={
+    checkReturnCode(remote.simxStopSimulation(id, OpMode.OneShotWait.rawCode))
   }
 }

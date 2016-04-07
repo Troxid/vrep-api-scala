@@ -1,5 +1,6 @@
 package vrepapiscala.joints
 
+import coppelia.remoteApi
 
 
 /**
@@ -7,7 +8,7 @@ package vrepapiscala.joints
   */
 sealed abstract class JointMode(val rawCode: Int)
 object JointMode {
-  import coppelia.remoteApi._
+  import remoteApi._
 
   case object Force extends JointMode(sim_jointmode_force)
   case object Passive extends JointMode(sim_jointmode_passive)

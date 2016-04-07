@@ -1,12 +1,13 @@
 package vrepapiscala.joints
 
-import coppelia.{remoteApi, FloatWA, FloatW}
-import vrepapiscala.OpMode
+import coppelia.{FloatW, FloatWA, remoteApi}
+import vrepapiscala.{OpMode, VRepAPI}
 
 /**
   * Created by trox on 01.02.16.
   */
-private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id: Int, handle: Int) {
+private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id: Int, handle: Int, opMode: OpMode) {
+  import VRepAPI._
 
   /** Sets the intrinsic target velocity of a non-spherical joint.
     * This command makes only sense when the joint mode is:
@@ -19,7 +20,7 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
     * @param target target velocity of the joint (linear or angular velocity depending on the joint-type)
     */
   def setTargetVelocity(target: Float): Unit = {
-    remote.simxSetJointTargetVelocity(id, handle, target, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxSetJointTargetVelocity(id, handle, target, opMode.rawCode))
   }
 
   /** Sets the target position of a joint if the joint is in
@@ -28,10 +29,9 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
     * @param target target position of the joint (angular or linear value depending on the joint type)
     */
   def setTargetPosition(target: Float): Unit = {
-    remote.simxSetJointTargetPosition(id, handle, target, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxSetJointTargetPosition(id, handle, target, opMode.rawCode))
   }
 
-  /** Retrieves the force or torque applied to a joint along/about its active axis. */
   /**
     * Retrieves the force or torque applied to a joint along/about its active axis.
     * This function retrieves meaningful information only if the joint is prismatic or revolute,
@@ -45,7 +45,7 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
   def getForce: Float = {
     val h = new FloatW(-1)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetJointForce(id, handle, h, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxGetJointForce(id, handle, h, opMode.rawCode))
     h.getValue
   }
 
@@ -55,7 +55,7 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
     * @param force maximum force or torque that the joint can exert
     */
   def setMaximumForce(force: Float): Unit = {
-    remote.simxSetJointForce(id, handle, force, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxSetJointForce(id, handle, force, opMode.rawCode))
   }
 
   /** Sets the intrinsic position of a joint.
@@ -67,7 +67,7 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
     * @param position position of the joint (angular or linear value depending on the joint type)
     */
   def setPosition(position: Float): Unit = {
-    remote.simxSetJointPosition(id, handle, position, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxSetJointPosition(id, handle, position, opMode.rawCode))
   }
 
   /** Retrieves the intrinsic position of a joint.
@@ -79,7 +79,7 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
   def getPosition: Float ={
     val h = new FloatW(-1)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetJointPosition(id, handle, h, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxGetJointPosition(id, handle, h, opMode.rawCode))
     h.getValue
   }
 
@@ -90,7 +90,7 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
   def getMatrix: Array[Float] = {
     val h = new FloatWA(12)
     //TODO: simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
-    remote.simxGetJointMatrix(id, handle, h, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxGetJointMatrix(id, handle, h, opMode.rawCode))
     h.getArray
   }
 
@@ -104,6 +104,6 @@ private[vrepapiscala] class AnyJoint private[vrepapiscala](remote: remoteApi, id
     require(matrix.length == 12, "matrix must be contain 12 values")
     val h = new FloatWA(12)
     matrix.copyToArray(h.getArray)
-    remote.simxSetSphericalJointMatrix(id, handle, h, OpMode.OneShotWait.rawCode)
+    checkReturnCode(remote.simxSetSphericalJointMatrix(id, handle, h, opMode.rawCode))
   }
 }
