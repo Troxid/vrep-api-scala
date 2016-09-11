@@ -16,16 +16,16 @@ class ScriptFunction private[vrepapiscala](
   private final val sizeParams = 10
 
   def apply(
-    ints: Seq[Int] = Seq.empty,
-    floats: Seq[Float] = Seq.empty,
-    strs: Seq[String] = Seq.empty,
+    ints: Array[Int] = Array.empty,
+    floats: Array[Float] = Array.empty,
+    strs: Array[String] = Array.empty,
     buffer: String = ""): ScriptFunction.Values ={
 
-    val inInts = new IntWA(ints.size)
+    val inInts = new IntWA(ints.length)
     ints.copyToArray(inInts.getArray)
-    val inFloats = new FloatWA(floats.size)
+    val inFloats = new FloatWA(floats.length)
     floats.copyToArray(inFloats.getArray)
-    val inStrs = new StringWA(strs.size)
+    val inStrs = new StringWA(strs.length)
     strs.copyToArray(inStrs.getArray)
     val inBuffers = new CharWA(buffer)
 
@@ -40,13 +40,13 @@ class ScriptFunction private[vrepapiscala](
       OpMode.OneShotWait.rawCode)
     VRepAPI.checkReturnCode(code)
     Values(
-      outInts.getArray.toVector,
-      outFloats.getArray.toVector,
-      outStrs.getArray.toVector,
+      outInts.getArray,
+      outFloats.getArray,
+      outStrs.getArray,
       outBuffers.getArray.mkString)
   }
 }
 
 object ScriptFunction {
-  case class Values(ints: Vector[Int], floats: Vector[Float], strs: Vector[String], buffer: String)
+  case class Values(ints: Array[Int], floats: Array[Float], strs: Array[String], buffer: String)
 }

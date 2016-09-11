@@ -24,22 +24,16 @@ class SphericalJoint private[vrepapiscala](
     *  @throws IllegalArgumentException matrix must be contain 12 values
     */
   def rawMatrix_=(matrix: Array[Float]): Unit = joint.setSphericalMatrix(matrix)
+  def setRawMatrix(matrix: Array[Float]): Unit =
+    this.rawMatrix = matrix
 
   def matrix_=(m: AxisMatrix): Unit = {
-    val arr = Array(
-      m.xAxis.alpha, m.yAxis.alpha, m.zAxis.alpha, 0,
-      m.xAxis.beta,  m.yAxis.beta,  m.zAxis.beta, 0,
-      m.xAxis.gamma, m.yAxis.gamma, m.zAxis.gamma, 0
-    )
-    rawMatrix = arr
+    rawMatrix = m.toRawMatrix
+  }
+  def setMatrix(m: AxisMatrix): Unit ={
+    rawMatrix = m.toRawMatrix
   }
 
-  def matrix: AxisMatrix = {
-    val arr = rawMatrix
-    AxisMatrix(
-      EulerAngles(arr(0), arr(4), arr(8)),
-      EulerAngles(arr(1), arr(5), arr(9)),
-      EulerAngles(arr(2), arr(6), arr(10))
-    )
-  }
+  def matrix: AxisMatrix = AxisMatrix.fromRawMatrix(rawMatrix)
+
 }

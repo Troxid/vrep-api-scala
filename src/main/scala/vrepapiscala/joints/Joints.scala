@@ -18,7 +18,7 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     *   <li> Joint mode: Force </li>
     * </ul>
     */
-  def spherical(name: String, opMode: OpMode = OpMode.OneShotWait): Try[SphericalJoint] = {
+  def spherical(name: String, opMode: OpMode): Try[SphericalJoint] = {
     //FIXME: bug in v-rep: return revolute, instead spherical
     val validType = JointType.Spherical
     val validMode = JointMode.Passive
@@ -34,6 +34,10 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     }
   }
 
+  def spherical(name: String): Try[SphericalJoint] = {
+    spherical(name, OpMode.OneShotWait)
+  }
+
   /**
     * Retrieves the joint(kinematic mode) with next parameters:
     * <ul>
@@ -41,7 +45,7 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     *   <li> Joint mode: Passive </li>
     * </ul>
     */
-  def passive(name: String, opMode: OpMode = OpMode.OneShotWait): Try[PassiveJoint] = {
+  def passive(name: String, opMode: OpMode): Try[PassiveJoint] = {
     val fstValidType = JointType.Prismatic
     val sndValidType = JointType.Revolute
     val validMode = JointMode.Passive
@@ -57,6 +61,10 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     }
   }
 
+  def passive(name: String): Try[PassiveJoint] = {
+    passive(name, OpMode.OneShotWait)
+  }
+
   /**
     * Retrieves the joint with next parameters:
     * <ul>
@@ -67,7 +75,7 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     *   <li> Spring-damper mode </li>
     * </ul>
     */
-  def spring(name: String, opMode: OpMode = OpMode.OneShotWait): Try[SpringJoint] = {
+  def spring(name: String, opMode: OpMode): Try[SpringJoint] = {
     val fstValidType = JointType.Prismatic
     val sndValidType = JointType.Revolute
     val validMode = JointMode.Force
@@ -83,6 +91,10 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     }
   }
 
+  def spring(name: String): Try[SpringJoint] = {
+    spring(name, OpMode.OneShotWait)
+  }
+
   /**
     * Retrieves the joint (like servo) with next parameters:
     * <ul>
@@ -93,7 +105,7 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     *   <li> Position control (PID) </li>
     * </ul>
     */
-  def withPositionControl(name: String, opMode: OpMode = OpMode.OneShotWait): Try[JointWithPositionControl]= {
+  def withPositionControl(name: String, opMode: OpMode): Try[JointWithPositionControl]= {
     val fstValidType = JointType.Prismatic
     val sndValidType = JointType.Revolute
     val validMode = JointMode.Force
@@ -109,6 +121,10 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     }
   }
 
+  def withPositionControl(name: String): Try[JointWithPositionControl] = {
+    withPositionControl(name, OpMode.OneShotWait)
+  }
+
   /**
     * Retrieves the joint (like DC motor) with next parameters::
     * <ul>
@@ -117,7 +133,7 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
     *   <li> Motor Enabled: True </li>
     * </ul>
     */
-  def withVelocityControl(name: String, opMode: OpMode = OpMode.OneShotWait): Try[JointWithVelocityControl]= {
+  def withVelocityControl(name: String, opMode: OpMode): Try[JointWithVelocityControl]= {
     val fstValidType = JointType.Prismatic
     val sndValidType = JointType.Revolute
     val validMode = JointMode.Force
@@ -131,6 +147,10 @@ class Joints private[vrepapiscala](remote: remoteApi, id: Int){
       case None =>
         Failure(new ObjectNotFoundException(name))
     }
+  }
+
+  def withVelocityControl(name: String): Try[JointWithVelocityControl]= {
+    withVelocityControl(name, OpMode.OneShotWait)
   }
 
   private def getInformationAboutJoint(handle: Int): Option[(JointType, JointMode, Float, Float)] = {
