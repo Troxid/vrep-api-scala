@@ -1,5 +1,4 @@
 
-import vrepapiscala.coppelia.remoteApi
 import vrepapiscala.{ScriptType, VRepAPI}
 
 object TestJoint extends App {

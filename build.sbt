@@ -15,6 +15,8 @@ pomIncludeRepository := { x => false }
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (isSnapshot.value)
@@ -44,3 +46,4 @@ pomExtra := (
       </developer>
     </developers>
 )
+

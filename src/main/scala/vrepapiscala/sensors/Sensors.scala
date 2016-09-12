@@ -52,8 +52,8 @@ class Sensors private[vrepapiscala](remote: remoteApi, id: Int){
         Failure(new ObjectNotFoundException(name))
     }
   }
-  def vision(name: String, width: Int, height: Int,): Try[VisionSensor] =
-    vision(name, width, height,OpMode.OneShotWait)
+  def vision(name: String, width: Int, height: Int): Try[VisionSensor] =
+    vision(name, width, height, OpMode.OneShotWait)
 
   private def getObjectHandle(name: String): Option[Int] = {
     val h = new IntW(-1)
