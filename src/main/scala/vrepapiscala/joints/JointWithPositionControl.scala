@@ -11,8 +11,8 @@ class JointWithPositionControl private[vrepapiscala](
   val limit: Float, val range: Float, opMode: OpMode){
   private val joint = new AnyJoint(remote, id, handle, opMode)
 
-  def setTargetPosition(target: Float) = joint.setTargetPosition(target)
-  def setMaximumForce(force: Float) = joint.setMaximumForce(force)
-  def position = joint.getPosition
-  def force = joint.getForce
+  def setTargetPosition(rad: Float): Unit = joint.setTargetPosition(rad)
+  def setMaximumForce(force: Float): Unit = joint.setMaximumForce(force)
+  def position: Float = joint.getPosition
+  def force: Float = joint.getForce
 }

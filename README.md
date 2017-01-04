@@ -1,16 +1,35 @@
 # v-rep scala
-Simple Scala binding for
+Simple Scala/Java binding for
 [Coppelia Robotics V-REP simulator](http://www.coppeliarobotics.com/) ([remote API](http://www.coppeliarobotics.com/helpFiles/en/remoteApiOverview.htm))
 
 ## Getting started
-1. Add the library in your sbt project by simply adding the following dependency to your build file:
+
+1. Add the library in your project by adding the following dependency to your build file:
+  
+  for SBT project:
 ```scala
-libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.2.1"
+libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.3.6"
 ```
-2. Copy platform-specific native library from
-    `V-REP/programming/remoteApiBindings/java/lib/`
-    into the root folder of your project (or configure `java.library.path`)
-3. Find the socket port number in `V-REP/remoteApiConnections.txt` and use
+
+for Gradle project:
+
+```
+dependencies {
+    compile     "com.github.troxid:vrepapiscala_2.12:0.3.6"
+}
+```
+
+for Maven project:
+
+```
+<dependency>
+  <groupId>com.github.troxid</groupId>
+  <artifactId>vrepapiscala_2.12</artifactId>
+  <version>0.3.6</version>
+</dependency>
+```
+
+2. Find the socket port number in `V-REP/remoteApiConnections.txt` and use
     it to connect to the server simulator
 
 ## Currently implemented things
@@ -88,5 +107,17 @@ class PioneerP3dx(api: VRepAPI) {
   def rightSensor = frontSensors(6)
 }
 ```
+## More examples (scala)
+[Connection]()
 
+[PioneerP3dx control]()
 
+[Test all components]()
+
+## More examples (java)
+
+[Connection]()
+
+[PioneerP3dx control]()
+
+[Test all components]()

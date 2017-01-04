@@ -2,4 +2,6 @@ target
 .idea
 /target
 out
-*.so
+project/project/
+src/main/resources/
+src/test/resources/

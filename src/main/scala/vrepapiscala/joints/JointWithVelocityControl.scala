@@ -11,8 +11,8 @@ class JointWithVelocityControl private[vrepapiscala](
   val limit: Float, val range: Float, opMode: OpMode){
   private val joint = new AnyJoint(remote, id, handle, opMode)
 
-  def setTargetVelocity(target: Float) = joint.setTargetVelocity(target)
-  def setMaximumForce(force: Float) = joint.setMaximumForce(force)
-  def position = joint.getPosition
-  def force = joint.getForce
+  def setTargetVelocity(radInSec: Float): Unit = joint.setTargetVelocity(radInSec)
+  def setMaximumForce(force: Float): Unit = joint.setMaximumForce(force)
+  def position: Float = joint.getPosition
+  def force: Float = joint.getForce
 }

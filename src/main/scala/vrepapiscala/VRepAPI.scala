@@ -1,9 +1,16 @@
 package vrepapiscala
 
+import java.io.{File, FileNotFoundException}
+import java.util.Locale
+
 import coppelia.remoteApi
+import cz.adamh.utils.NativeUtils
 import vrepapiscala.common.ReturnCommandException
 import vrepapiscala.joints.Joints
 import vrepapiscala.sensors._
+
+import scala.util.{Failure, Success, Try}
+
 
 /**
   * Created by troxid on 22.11.15.
@@ -51,15 +58,71 @@ class VRepAPI private(id: Int) extends AutoCloseable {
 }
 
 object VRepAPI {
+  private var nativeIsLoaded = false
   private val remote = new remoteApi()
-  remote.simxFinish(-1)
 
   def connect(ip: String, port: Int): Option[VRepAPI] = {
+    checkNative()
+    remote.simxFinish(-1)
     val id = remote.simxStart(ip, port, true, true, 5000, 5)
     if (id == remoteApi.simx_return_ok) {
       Some(new VRepAPI(id: Int))
     } else {
       None
+    }
+  }
+
+  def loadDefaultNative(): Unit ={
+    val arch = System.getProperty("sun.arch.data.model") // 32 or 64
+    val opSys   = System.getProperty("os.name").toLowerCase(Locale.ENGLISH)
+    println("""Native libs preload from "V-REP_PRO_EDU_V3_3_2""")
+    println(s"JRE arch: $arch bit, OS: $opSys")
+    val path = (arch, opSys) match {
+      // Windows
+      case ("32", os) if os.contains("win")  => "/win/32Bit/remoteApiJava.dll"
+      case ("64", os) if os.contains("win")  => "/win/64Bit/remoteApiJava.dll"
+
+      // Linux
+      case ("32", os) if os.contains("nux")  => "/nux/32Bit/libremoteApiJava.so"
+      case ("64", os) if os.contains("nux")  => "/nux/64Bit/libremoteApiJava.so"
+
+      // MacOS
+      case (_, os)    if os.contains("mac")  => "/mac/libremoteApiJava.dylib"
+
+      // Error
+      case _ =>
+        throw new FileNotFoundException("not found arch and os information")
+    }
+    println(s"Loading... : $path")
+    Try(NativeUtils.loadLibraryFromJar(path)) match {
+      case Failure(exception) =>
+        val absPath = new File("/native_lib/" + path.tail)
+        println(s"Loading from JAR failed (${exception.getMessage}).")
+        println(s"Try load from directory: ${absPath.getAbsolutePath}")
+        Try(System.load(absPath.getAbsolutePath)) match {
+          case Failure(exception) =>
+            println(s"Loading from directory failed. ${exception.getMessage}")
+          case Success(_) =>
+            println("Native library loaded")
+        }
+      case Success(_) =>
+        println("Native library loaded")
+    }
+    nativeIsLoaded = true
+  }
+
+  /**
+    * Load native library from specific path
+    * @param absolutePath - absolute path to native libs
+    */
+  def loadSpecificNative(absolutePath: String): Unit ={
+    System.load(absolutePath)
+    nativeIsLoaded = true
+  }
+
+  def checkNative(): Unit ={
+    if(!this.nativeIsLoaded){
+      loadDefaultNative()
     }
   }
 

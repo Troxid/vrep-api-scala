@@ -11,9 +11,9 @@ class PassiveJoint private[vrepapiscala](
   val limit: Float, val range: Float, opMode: OpMode){
   private val joint = new AnyJoint(remote, id, handle, opMode)
 
-  def position_=(float: Float): Unit = joint.setPosition(float)
+  def position_=(rad: Float): Unit = joint.setPosition(rad)
 
-  def setPosition(float: Float): Unit = joint.setPosition(float)
+  def setPosition(rad: Float): Unit = joint.setPosition(rad)
 
   def position: Float = joint.getPosition
 }

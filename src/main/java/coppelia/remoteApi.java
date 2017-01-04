@@ -30,8 +30,10 @@ package coppelia;
 
 public class remoteApi
 {
-	static{	
-		System.loadLibrary("remoteApiJava");
+	static{
+		// Use VRepAPI.loadDefaultNative() or
+		// VRepAPI.loadSpecificNative() instead
+		//System.loadLibrary("remoteApiJava");
 	}
 
 	public native int simxStart(final String connectionAddress, int connectionPort, boolean waitUntilConnected, boolean doNotReconnectOnceDisconnected, int timeOutInMs, int commThreadCycleInMs);

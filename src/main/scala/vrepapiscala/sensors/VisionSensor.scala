@@ -1,5 +1,8 @@
 package vrepapiscala.sensors
 
+import java.awt.Color
+import java.awt.image.BufferedImage
+
 import coppelia._
 import vrepapiscala.OpMode
 import vrepapiscala.VRepAPI._
@@ -76,8 +79,35 @@ class VisionSensor private[vrepapiscala](
     buf.getArray
   }
 
+  def colorFrame: Array[Array[Color]] ={
+    val img = this
+      .rawImage()
+      .grouped(3)
+      .map(arr => new Color(arr(0), arr(1), arr(2)))
+      .toVector
+    val resutlArr = Array.ofDim[Color](resolutionY, resolutionX)
+    for(y <- 0 until resolutionY; x <- 0 until resolutionX){
+      val index = y * resolutionY + x
+      resutlArr((resolutionY - 1) - y)(x) = img(index)
+    }
+    resutlArr
+  }
+
+  def colorImg: BufferedImage = {
+    val frame = this.colorFrame
+    val img = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_RGB)
+    for(y <- 0 until resolutionY; x <- 0 until resolutionX){
+      img.setRGB(x, y, frame(y)(x).getRGB)
+    }
+    img
+  }
+
   private def checkResolutions(realRes: (Int, Int), userRes: (Int, Int)): Unit ={
-    require(realRes == userRes, "Resolutions must be same")
+    require(realRes == userRes,
+      s"""Resolutions must be same
+        |in program you select: $userRes
+        |but in v-rep: $realRes
+      """.stripMargin)
   }
 }
 

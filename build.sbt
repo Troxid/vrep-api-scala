@@ -1,9 +1,12 @@
+import sbt.Keys.scalaVersion
 
 name := "vrepapiscala"
 
-version := "0.2.1"
+version := "0.3.6"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
+
+crossScalaVersions := Seq("2.12.1", "2.11.8", "2.10.6")
 
 organization := "com.github.troxid"
 
@@ -15,7 +18,14 @@ pomIncludeRepository := { x => false }
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+libraryDependencies ++= Seq(
+  "org.scala-lang" % "scala-library" % scalaVersion.value ,
+  "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+)
+
+unmanagedBase := baseDirectory.value / "lib"
+
+unmanagedResourceDirectories in Compile += baseDirectory.value / "native_lib"
 
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
