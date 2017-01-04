@@ -7,27 +7,24 @@ Simple Scala/Java binding for
 1. Add the library in your project by adding the following dependency to your build file:
   
   for SBT project:
-```scala
-libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.3.6"
-```
+  ```scala
+  libraryDependencies += "com.github.troxid" %% "vrepapiscala" % "0.3.6"
+  ```
+  for Gradle project:
 
-for Gradle project:
-
-```
-dependencies {
-    compile     "com.github.troxid:vrepapiscala_2.12:0.3.6"
-}
-```
-
-for Maven project:
-
-```
-<dependency>
-  <groupId>com.github.troxid</groupId>
-  <artifactId>vrepapiscala_2.12</artifactId>
-  <version>0.3.6</version>
-</dependency>
-```
+  ```
+  dependencies {
+      compile     "com.github.troxid:vrepapiscala_2.12:0.3.6"
+  }
+  ```
+  for Maven project:
+  ```
+  <dependency>
+    <groupId>com.github.troxid</groupId>
+    <artifactId>vrepapiscala_2.12</artifactId>
+    <version>0.3.6</version>
+  </dependency>
+  ```
 
 2. Find the socket port number in `V-REP/remoteApiConnections.txt` and use
     it to connect to the server simulator
@@ -107,17 +104,18 @@ class PioneerP3dx(api: VRepAPI) {
   def rightSensor = frontSensors(6)
 }
 ```
+
 ## More examples (scala)
-[Connection]()
+[Connection](https://github.com/Troxid/vrep-api-scala/blob/master/src/test/scala/OpenConnectionTest.scala)
 
-[PioneerP3dx control]()
+[PioneerP3dx control](https://github.com/Troxid/vrep-api-scala/blob/master/src/test/scala/PioneerRemoteControlExample.scala)
 
-[Test all components]()
+[Test all components](https://github.com/Troxid/vrep-api-scala/blob/master/src/test/scala/TestAllComponents.scala)
 
 ## More examples (java)
 
-[Connection]()
+[Connection](https://github.com/Troxid/vrep-api-scala/blob/master/src/test/java/OpenConnectionTestJava.java)
 
-[PioneerP3dx control]()
+[PioneerP3dx control](https://github.com/Troxid/vrep-api-scala/blob/master/src/test/java/PioneerRemoteControlExampleJava.java)
 
-[Test all components]()
+[Test all components](https://github.com/Troxid/vrep-api-scala/blob/master/src/test/java/TestAllComponentJava.java)
