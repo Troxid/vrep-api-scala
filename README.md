@@ -2,6 +2,7 @@
 
 # v-rep scala
 
+[![Latest version](https://index.scala-lang.org/troxid/vrep-api-scala/vrepapiscala/latest.svg)](https://index.scala-lang.org/troxid/vrep-api-scala/vrepapiscala)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.troxid/vrepapiscala_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.troxid/vrepapiscala_2.12)
 
 Simple Scala/Java binding for
