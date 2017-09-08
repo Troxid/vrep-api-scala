@@ -1,4 +1,9 @@
+
+
 # v-rep scala
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.troxid/vrepapiscala_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.troxid/vrepapiscala_2.12)
+
 Simple Scala/Java binding for
 [Coppelia Robotics V-REP simulator](http://www.coppeliarobotics.com/) ([remote API](http://www.coppeliarobotics.com/helpFiles/en/remoteApiOverview.htm))
 
